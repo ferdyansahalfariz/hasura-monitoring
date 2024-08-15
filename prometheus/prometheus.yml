@@ -1,0 +1,72 @@
+# Global config
+global:
+  scrape_interval:     60s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
+  evaluation_interval: 15s # Evaluate rules every 15 seconds. The default is every 1 minute.
+  scrape_timeout: 30s  # scrape_timeout is set to the global default (10s).
+# A scrape configuration containing exactly one endpoint to scrape:# Here it's Prometheus itself.
+alerting:
+  alertmanagers:
+  - static_configs:
+    - targets: 
+      - 192.168.35.40:9093
+
+rule_files:
+  - "alert.rules"
+  - "kafka.rules"
+  - "connect.rules"
+
+scrape_configs:
+  # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
+  - job_name: 'prometheus'
+    static_configs:
+    - targets: ['localhost:9090']
+        
+  - job_name: "node-exporter-hasura"
+    static_configs:
+      - targets: ["10.100.13.24:9100"]
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: hostname
+        regex: '([^:]+)(:[0-9]+)?'
+
+  #- job_name: "hasuraferdy"
+  #  metrics_path: '/v1/metrics'
+  #  bearer_token: "alldata"
+  #  scrape_interval: 30s
+   # static_configs:
+   #   - targets: [
+   #         "master.k8s.alldataint.com"
+   #       ]
+   #     labels:
+   #       service_name: hasura
+   #       container_id: hasura
+          
+  - job_name: 'blackbox'
+    scrape_interval: 30s
+    metrics_path: /probe
+    params:
+      module: [http_2xx]
+    static_configs:
+      - targets:
+          - http://master.k8s.alldataint.com/healthz
+        labels:
+          service_name: hasura
+          container_id: hasura
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: 10.100.13.8:9115  # Alamat Blackbox Exporter
+      
+  - job_name: "otel-collector"
+    scrape_interval: 10s
+    static_configs:
+      - targets: ["10.100.13.24:8888"]
+
+  - job_name: "otel-collector-hasura"
+    scrape_interval: 10s
+    honor_labels: true
+    static_configs:
+      - targets: ["10.100.13.24:8889"]

@@ -1,0 +1,106 @@
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: "0.0.0.0:4317"
+      http:
+        endpoint: "0.0.0.0:4318"
+
+exporters:
+  prometheus:
+    endpoint: "0.0.0.0:8889"
+
+  # Data sources: traces, metrics, logs
+  debug:
+    verbosity: detailed
+    
+  elasticsearch:
+    endpoints: http://10.100.13.44:9200
+    auth:
+      authenticator: basicauth
+
+  loki:
+    endpoint: http://loki:3100/loki/api/v1/push
+
+  ## Export traces to Jaeger via OTLP protocol.
+  ## You can also export traces directly to jaeger to graphql-engine.
+  ## However, the collector supports
+  otlp/jaeger:
+    endpoint: "http://10.100.13.24:50051" 
+    tls:
+      insecure: true
+      
+processors:
+  batch:
+
+  transform:
+    error_mode: ignore
+    metric_statements:
+      # OpenTelemetry doesn't automatically convert resource.attributes to label,
+      # so we need to assign them to data_point attributes
+      # {
+      #   "resource_metrics": [
+      #     {
+      #       "resource": {
+      #         "attributes": [
+      #           {
+      #             "key": "host.name",
+      #             "value": {
+      #               "string_value": "abc:8080"
+      #             }
+      #           },
+      #         ]
+      #       }
+      #     }
+      #   ]
+      # }
+      - context: datapoint
+        statements:
+          - set(attributes["instance"], resource.attributes["host.name"])
+
+  memory_limiter:
+    check_interval: 1s
+    limit_percentage: 65
+    spike_limit_percentage: 20
+
+  filter:
+    error_mode: ignore
+    traces:
+      span:
+        # You can filter unused traces to save cost, for example:
+        - 'IsMatch(name, "Event trigger")'
+        - 'IsMatch(name, "Scheduled trigger")'
+        - 'IsMatch(name, "websocket")'
+        - 'IsMatch(name, "/v1/version")'
+        - 'IsMatch(name, "/v1/entitlement")'
+        - 'IsMatch(name, "/v1alpha1/config")'
+
+    logs:
+      log_record:
+        # You can filter unused logs to save cost, or configure HASURA_GRAPHQL_ENABLED_LOG_TYPES in GraphQL Engine to disable unused log types
+        - 'attributes["type"] == "query-log" and IsMatch(body["query"]["operationName"], "UnknownQuery")'
+        - 'attributes["type"] == "http-log" and IsMatch(body["operation"]["query"]["operationName"], "UnknownQuery")'
+
+extensions:
+  basicauth:
+    client_auth:
+      username: elastic
+      password: changeme
+
+service:
+  extensions: [basicauth]
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [otlp/jaeger, elasticsearch, debug]
+
+    logs:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [loki, elasticsearch, debug]
+
+    metrics:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [prometheus, elasticsearch, debug]
