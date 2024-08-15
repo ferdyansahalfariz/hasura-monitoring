@@ -21,14 +21,8 @@ Here's a list of all the services that are created:
 
 | Service           | Port  | Description                         | Notes                                         |
 | ----------------- | :---: | ----------------------------------- | --------------------------------------------- |
-| HGE               | :8080 | Hasura GraphQL Engine               |                                               |
-| Postgres          | :5432 | Postgres Database Container         |                                               |
-| Prometheus        | :9090 | Data Aggregator                     |                                               |
-| Alert Manager     | :9093 | Adds Alerting for Prometheus Checks |                                               |
-| Grafana           | :3000 | UI To Show Prometheus Data          | Username: `admin`, Password: `HGEMonitoring!` |
 | Node Exporter     | :9100 | Data Collector for Host Stats       |                                               |
-| Blackbox Exporter | :9115 | Data Collector for Ping & Uptime    |                                               |
-| Redis             | :6379 | Latest Redis Cache Container        |                                               |
+| Elasticsearch     | :9200 | elasticsearch db instance           |                                               |
 | Jaeger            | :4318 | Jaeger OTLP HTTP                    |                                               |
 | Jaeger            | :4317 | Jaeger OTLP gRPC                    |                                               |
 | Jaeger            | :4002 | Jaeger Web UI                       |                                               |
@@ -38,6 +32,10 @@ Here's a list of all the services that are created:
 ### Grafana Dashboards
 
 Dashboard templates are collected in the [dashboards/hasura](grafana/dashboards/hasura) folder. You can import those files to your config folders where the Grafana service is configured, or [import them directly](https://grafana.com/docs/grafana/latest/dashboards/manage-dashboards/#import-a-dashboard) on the Grafana web UI.
+
+### Elastic Exporter from Otel
+
+https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/main/exporter/elasticsearchexporter
 
 ### Example
 
