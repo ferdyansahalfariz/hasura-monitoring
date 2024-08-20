@@ -28,6 +28,18 @@
 
 ![image](https://github.com/user-attachments/assets/8a8eaf97-daf7-4ec5-b000-e09b5136dfa8)
 
+1. Buka DB editor
+
+![image](https://github.com/user-attachments/assets/6d083d6b-3013-47b3-9d56-89cb512a38bb)
+
+2. Create new database untuk hasura-chm-schema
+
+![image](https://github.com/user-attachments/assets/24734fb5-9c7d-4f80-8cb8-396c5a9d637f)
+
+3. Pastikan database hasura-chm-schema sudah terbuat
+
+![image](https://github.com/user-attachments/assets/851367d0-3bbf-4521-9eec-a8bdc9767872)
+
 ### Pengecekan config di Dockerfile & Jenkinsfile
 1. Buka repo bitbucket dan periksa file Dockerfile, periksa apakah image yang digunakan sudah menggunakan image HGE dengan tag v2.40.2
 
