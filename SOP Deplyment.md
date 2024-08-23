@@ -113,6 +113,6 @@
 
 ![image](https://github.com/user-attachments/assets/beead863-a111-4c2e-a645-d827f9cd0ed6)
 
-3. Jika terjadi inconsistency metadata pada hasura, lakukan fixing metadata melalui file yaml nya dengan mengikuti daftar inconsistency nya pada bagian metadata status, setelahnya maka lakukan `hasura metadata apply`
+3. Jika terjadi inconsistency metadata pada hasura, lakukan fixing metadata melalui file yaml nya dengan mengikuti daftar inconsistency nya pada bagian metadata status di console, setelahnya maka lakukan `hasura metadata apply`
 
 ![image](https://github.com/user-attachments/assets/2cdf0ccc-c342-403a-bd8c-00f0e2881634)
