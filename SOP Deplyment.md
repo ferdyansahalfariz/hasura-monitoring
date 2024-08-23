@@ -49,6 +49,35 @@
 
 ![image](https://github.com/user-attachments/assets/23686648-0a26-4de2-b6cd-30e60fc9cef3)
 
+
+### Pembuatan kubesecret 	
+
+1. Akses SSH server yang bisa kubectl ke Kubernetes Cluster
+
+2. Buat secret pada kubernetes sesuai nama yang digunakan di values.staging.yaml dengan command kubectl dengan contoh berikut: https://drive.google.com/file/d/1N1c9tfDR_EJK1xrkhZV5IGr_l_Dnai2O/view?usp=drive_link
+
+3. Jika tidak memiliki akses SSH ke server jenkins, maka buka kubernetes dashboard, add resource dan masukan file yaml seperti berikut: https://drive.google.com/file/d/1siZvv3GnX9CMifmdljAdP-meoeki_5bs/view?usp=sharing
+
+### Pembuatan image pull secret	
+
+1. Masuk ke kubernetes dashboard, masuk ke namespace datahub-hasura dan buat resource baru menggunakan yaml dengan tipe .dockerconfigjson yang berisi auth url registry beserta username, password dan email yang memiliki akses, upload
+
+![image](https://github.com/user-attachments/assets/e2e7dca7-48db-4800-8da5-76eb58417f2b)
+
+### Penambahan etc hosts untuk staging.datahub.co.id	
+
+1. SSH ke server jenkins staging dan masuk ke etc/hosts, tambahkan alias pada ip tempat hasura di instance dengan alias staging.datahub.bri.co.id, simpan
+
+2. Lakukan ping ke staging.datahub.bri.co.id dan pastikan sudah terkoneksi
+   
+### Installasi hasura cli di server jenkins	
+
+1. SSH ke server jenkins, dan lakukan instalasi hasura cli seperti biasa sampai selesai
+   
+2. konfirmasi instalasi dengan menjalankan command `hasura` dan pastikan hasura cli sudah terinstall
+
+![image](https://github.com/user-attachments/assets/c0eb1481-ab18-444c-9d34-2361d3f1ea2c)
+
 ### Pengecekan values.staging.yaml
 1. buka values.staging.yaml pada folder helm/datahub-hasura-chm/ dan lakukan pengecekan pada bagian env, pastikan tidak terdapat value yang menyimpan data penting seperti kredensial, admin secret dsb
 
