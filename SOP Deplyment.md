@@ -28,6 +28,10 @@
 
 ![image](https://github.com/user-attachments/assets/8a8eaf97-daf7-4ec5-b000-e09b5136dfa8)
 
+### Pembuatan namespace di kubernetes
+1. Buka kubernetes dashboard dan buat namespace baru pada menu add resource
+![image](https://github.com/user-attachments/assets/65505683-2c0a-4bf2-a355-c969525d88cf)
+
 1. Buka DB editor
 
 ![image](https://github.com/user-attachments/assets/6d083d6b-3013-47b3-9d56-89cb512a38bb)
